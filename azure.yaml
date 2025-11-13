@@ -1,0 +1,6 @@
+# Azure deployment configuration
+name: firstazureapp
+services:
+  web:
+    language: python
+    version: "3.13"
