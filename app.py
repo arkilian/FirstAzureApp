@@ -36,8 +36,8 @@ def health():
             conn.close()
         else:
             db_status = "unhealthy"
-    except Exception as e:
-        db_status = f"unhealthy: {str(e)}"
+    except Exception:
+        db_status = "unhealthy"
     
     return jsonify({
         'status': 'healthy',
@@ -59,8 +59,8 @@ def get_users():
         conn.close()
         
         return jsonify({'users': users})
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+    except Exception:
+        return jsonify({'error': 'Failed to retrieve users'}), 500
 
 @app.route('/init-db')
 def init_db():
@@ -95,8 +95,10 @@ def init_db():
         conn.close()
         
         return jsonify({'message': 'Database initialized successfully'})
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+    except Exception:
+        return jsonify({'error': 'Failed to initialize database'}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=8000)
+    # Only enable debug mode when FLASK_DEBUG is explicitly set
+    debug_mode = os.getenv('FLASK_DEBUG', 'False').lower() == 'true'
+    app.run(debug=debug_mode, host='0.0.0.0', port=8000)
