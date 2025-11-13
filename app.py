@@ -10,10 +10,12 @@ load_dotenv()
 app = Flask(__name__)
 
 # Database configuration
-DATABASE_URL = os.getenv('DATABASE_URL')
+DATABASE_URL = os.getenv('DATABASE_URL', None)
 
 def get_db_connection():
     """Create a database connection"""
+    if not DATABASE_URL:
+        return None
     try:
         conn = psycopg2.connect(DATABASE_URL, cursor_factory=RealDictCursor)
         return conn
@@ -29,15 +31,16 @@ def index():
 @app.route('/health')
 def health():
     """Health check endpoint"""
-    db_status = "healthy"
-    try:
-        conn = get_db_connection()
-        if conn:
-            conn.close()
-        else:
+    db_status = "not_configured" if not DATABASE_URL else "healthy"
+    if DATABASE_URL:
+        try:
+            conn = get_db_connection()
+            if conn:
+                conn.close()
+            else:
+                db_status = "unhealthy"
+        except Exception:
             db_status = "unhealthy"
-    except Exception:
-        db_status = "unhealthy"
     
     return jsonify({
         'status': 'healthy',
@@ -99,6 +102,8 @@ def init_db():
         return jsonify({'error': 'Failed to initialize database'}), 500
 
 if __name__ == '__main__':
+    # Get port from environment variable for Azure App Service
+    port = int(os.getenv('PORT', 8000))
     # Only enable debug mode when FLASK_DEBUG is explicitly set
     debug_mode = os.getenv('FLASK_DEBUG', 'False').lower() == 'true'
-    app.run(debug=debug_mode, host='0.0.0.0', port=8000)
+    app.run(debug=debug_mode, host='0.0.0.0', port=port)
