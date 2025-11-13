@@ -1,2 +1,245 @@
-# FirstAzureApp
-FirstAzureApp
+# FirstAzureApp 🚀
+
+Primeira aplicação Azure com Python 3.13 e PostgreSQL!
+
+## 📋 Descrição
+
+Esta é uma aplicação web desenvolvida com Flask que demonstra a integração entre Python e PostgreSQL na Azure. A aplicação inclui:
+
+- ✅ API REST com Flask
+- ✅ Conexão com PostgreSQL
+- ✅ Interface web interativa
+- ✅ Endpoints para gestão de utilizadores
+- ✅ Health checks
+- ✅ Pronta para deploy na Azure
+
+## 🛠️ Tecnologias
+
+- **Python 3.13** - Linguagem de programação
+- **Flask** - Framework web
+- **PostgreSQL** - Base de dados
+- **psycopg2** - Driver PostgreSQL para Python
+- **Gunicorn** - Servidor WSGI para produção
+- **Azure App Service** - Plataforma de hospedagem
+
+## 📦 Instalação Local
+
+### Pré-requisitos
+
+- Python 3.13 ou superior
+- PostgreSQL instalado e em execução
+- pip (gestor de pacotes Python)
+
+### Passos
+
+1. **Clone o repositório:**
+   ```bash
+   git clone https://github.com/arkilian/FirstAzureApp.git
+   cd FirstAzureApp
+   ```
+
+2. **Crie um ambiente virtual:**
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # No Windows: venv\Scripts\activate
+   ```
+
+3. **Instale as dependências:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Configure as variáveis de ambiente:**
+   ```bash
+   cp .env.example .env
+   ```
+   
+   Edite o ficheiro `.env` com as suas credenciais PostgreSQL:
+   ```
+   DATABASE_URL=postgresql://seu_usuario:sua_senha@localhost:5432/firstazureapp
+   ```
+
+5. **Crie a base de dados:**
+   ```bash
+   # No PostgreSQL, execute:
+   createdb firstazureapp
+   ```
+
+6. **Execute a aplicação:**
+   ```bash
+   python app.py
+   ```
+
+7. **Acesse no navegador:**
+   ```
+   http://localhost:8000
+   ```
+
+## 🚀 Deploy na Azure
+
+### Opção 1: Azure CLI
+
+1. **Instale a Azure CLI:**
+   ```bash
+   # Siga as instruções em: https://docs.microsoft.com/cli/azure/install-azure-cli
+   ```
+
+2. **Login na Azure:**
+   ```bash
+   az login
+   ```
+
+3. **Crie um grupo de recursos:**
+   ```bash
+   az group create --name FirstAzureAppRG --location westeurope
+   ```
+
+4. **Crie um servidor PostgreSQL:**
+   ```bash
+   az postgres flexible-server create \
+     --resource-group FirstAzureAppRG \
+     --name firstazureapp-db \
+     --location westeurope \
+     --admin-user azureuser \
+     --admin-password <sua-senha-segura> \
+     --sku-name Standard_B1ms \
+     --tier Burstable \
+     --version 14
+   ```
+
+5. **Crie uma base de dados:**
+   ```bash
+   az postgres flexible-server db create \
+     --resource-group FirstAzureAppRG \
+     --server-name firstazureapp-db \
+     --database-name firstazureapp
+   ```
+
+6. **Crie o App Service:**
+   ```bash
+   az webapp up \
+     --resource-group FirstAzureAppRG \
+     --name firstazureapp \
+     --runtime "PYTHON:3.11" \
+     --sku B1
+   ```
+
+7. **Configure a variável de ambiente:**
+   ```bash
+   az webapp config appsettings set \
+     --resource-group FirstAzureAppRG \
+     --name firstazureapp \
+     --settings DATABASE_URL="postgresql://azureuser:<senha>@firstazureapp-db.postgres.database.azure.com:5432/firstazureapp"
+   ```
+
+8. **Configure o comando de startup:**
+   ```bash
+   az webapp config set \
+     --resource-group FirstAzureAppRG \
+     --name firstazureapp \
+     --startup-file "startup.sh"
+   ```
+
+### Opção 2: Visual Studio Code
+
+1. Instale a extensão "Azure App Service"
+2. Faça login na sua conta Azure
+3. Clique com o botão direito na pasta do projeto
+4. Selecione "Deploy to Web App"
+5. Siga as instruções do assistente
+
+## 📚 Endpoints da API
+
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| GET | `/` | Página inicial com interface web |
+| GET | `/health` | Verificar estado da aplicação e BD |
+| GET | `/init-db` | Inicializar a base de dados com dados de exemplo |
+| GET | `/users` | Listar todos os utilizadores |
+
+## 🧪 Testar a Aplicação
+
+1. Acesse a página inicial: `http://localhost:8000` ou `https://seu-app.azurewebsites.net`
+2. Clique em "Verificar Saúde" para testar a conexão
+3. Clique em "Inicializar BD" para criar a tabela e dados de exemplo
+4. Clique em "Listar Utilizadores" para ver os dados
+
+## 📁 Estrutura do Projeto
+
+```
+FirstAzureApp/
+│
+├── app.py              # Aplicação Flask principal
+├── requirements.txt    # Dependências Python
+├── startup.sh         # Script de startup para Azure
+├── azure.yaml         # Configuração Azure
+├── .env.example       # Exemplo de variáveis de ambiente
+├── .gitignore         # Ficheiros a ignorar no Git
+├── README.md          # Este ficheiro
+│
+└── templates/
+    └── index.html     # Template HTML da página inicial
+```
+
+## 🔧 Desenvolvimento
+
+### Adicionar novos endpoints
+
+Edite `app.py` e adicione novas rotas:
+
+```python
+@app.route('/novo-endpoint')
+def novo_endpoint():
+    return jsonify({'mensagem': 'Olá!'})
+```
+
+### Modificar a base de dados
+
+Edite a função `init_db()` em `app.py` para adicionar novas tabelas ou dados.
+
+## 🔐 Segurança
+
+- ⚠️ Nunca commit o ficheiro `.env` com credenciais reais
+- 🔒 Use senhas fortes para a base de dados
+- 🛡️ Configure as regras de firewall do PostgreSQL na Azure
+- 🔑 Use Azure Key Vault para armazenar segredos em produção
+
+## 🐛 Resolução de Problemas
+
+### Erro de conexão com a base de dados
+
+- Verifique se o PostgreSQL está a correr
+- Confirme as credenciais no ficheiro `.env`
+- Na Azure, verifique as regras de firewall do servidor PostgreSQL
+
+### Erro ao instalar psycopg2
+
+Se tiver problemas a instalar `psycopg2`, tente:
+```bash
+pip install psycopg2-binary
+```
+
+## 📝 Licença
+
+Este projeto é open source e está disponível sob a licença MIT.
+
+## 👨‍💻 Autor
+
+Desenvolvido como exemplo de primeira aplicação Azure com Python e PostgreSQL.
+
+## 🤝 Contribuições
+
+Contribuições são bem-vindas! Sinta-se à vontade para:
+- Reportar bugs
+- Sugerir novas funcionalidades
+- Enviar pull requests
+
+## 📞 Suporte
+
+Para questões e suporte:
+- Crie uma issue no GitHub
+- Consulte a documentação da Azure: https://docs.microsoft.com/azure/
+
+---
+
+⭐ Se este projeto foi útil, considere dar uma estrela no GitHub!
