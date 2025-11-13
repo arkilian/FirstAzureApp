@@ -53,9 +53,9 @@ module web './core/host/appservice.bicep' = {
     runtimeName: 'python'
     runtimeVersion: '3.11'
     appCommandLine: 'gunicorn --workers=4 --bind=0.0.0.0:8000 app:app'
-    appSettings: {
-      DATABASE_URL: 'postgresql://dbadmin:P@ssw0rd2024!@postgres-firstapp-dev.postgres.database.azure.com/firstappdb?sslmode=require'
-    }
+    // Do not store secrets in IaC. Configure app settings after deploy
+    // using scripts or CI/CD variables (see configure-azure-env.ps1).
+    appSettings: {}
   }
 }
 
