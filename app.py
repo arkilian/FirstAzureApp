@@ -46,11 +46,26 @@ def index():
 @app.route('/health')
 def health():
     """Health check endpoint"""
-    return jsonify({
+    status = {
         'status': 'healthy',
         'message': 'Application is running on Azure!',
-        'version': '1.0'
-    })
+        'version': '1.0',
+        'database': 'not checked'
+    }
+
+    # Try to check database connection
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute('SELECT 1;')
+        cursor.close()
+        conn.close()
+        status['database'] = 'connected'
+    except Exception as e:
+        status['database'] = 'error'
+        status['database_error'] = str(e)
+
+    return jsonify(status)
 
 @app.route('/info')
 def info():
@@ -108,6 +123,74 @@ def list_tables():
         return jsonify({
             'status': 'error',
             'message': str(e)
+        }), 500
+
+@app.route('/init-db')
+def init_db():
+    """Initialize database with users table and sample data"""
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        # Create users table
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS users (
+                id SERIAL PRIMARY KEY,
+                name VARCHAR(100) NOT NULL,
+                email VARCHAR(100) UNIQUE NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+        """)
+
+        # Insert sample data
+        cursor.execute("""
+            INSERT INTO users (name, email)
+            VALUES
+                ('Jo�o Silva', 'joao@example.com'),
+                ('Maria Santos', 'maria@example.com'),
+                ('Pedro Costa', 'pedro@example.com')
+            ON CONFLICT (email) DO NOTHING;
+        """)
+
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+        return jsonify({
+            'status': 'success',
+            'message': 'Base de dados inicializada com sucesso!'
+        })
+    except Exception as e:
+        return jsonify({
+            'status': 'error',
+            'error': str(e)
+        }), 500
+
+@app.route('/users')
+def get_users():
+    """Get all users from the database"""
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(cursor_factory=RealDictCursor)
+        cursor.execute('SELECT id, name, email, created_at FROM users ORDER BY id;')
+        users = cursor.fetchall()
+        cursor.close()
+        conn.close()
+
+        # Convert datetime objects to strings
+        for user in users:
+            if user.get('created_at'):
+                user['created_at'] = user['created_at'].isoformat()
+
+        return jsonify({
+            'status': 'success',
+            'users': users,
+            'count': len(users)
+        })
+    except Exception as e:
+        return jsonify({
+            'status': 'error',
+            'error': str(e)
         }), 500
 
 if __name__ == '__main__':
