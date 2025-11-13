@@ -1,60 +1,60 @@
-# Guia de Implementação - Primeira Azure App
+# Guia de ImplementaÃ§Ã£o - Primeira Azure App
 
-## 🎯 O que foi criado
+## ðŸŽ¯ O que foi criado
 
-Esta implementação inclui uma aplicação web completa pronta para ser implantada no Azure:
+Esta implementaÃ§Ã£o inclui uma aplicaÃ§Ã£o web completa pronta para ser implantada no Azure:
 
-### Arquitetura da Aplicação
+### Arquitetura da AplicaÃ§Ã£o
 
 ```
 FirstAzureApp/
-│
-├── app.py              # Aplicação Flask principal com API REST
-├── requirements.txt    # Dependências Python
-├── startup.sh         # Script de inicialização para Azure
-├── azure.yaml         # Configuração de deployment Azure
-├── .env.example       # Template de variáveis de ambiente
-├── README.md          # Documentação completa
-│
-└── templates/
-    └── index.html     # Interface web responsiva em Português
+â”‚
+â”œâ”€â”€ app.py              # AplicaÃ§Ã£o Flask principal com API REST
+â”œâ”€â”€ requirements.txt    # DependÃªncias Python
+â”œâ”€â”€ startup.sh         # Script de inicializaÃ§Ã£o para Azure
+â”œâ”€â”€ azure.yaml         # ConfiguraÃ§Ã£o de deployment Azure
+â”œâ”€â”€ .env.example       # Template de variÃ¡veis de ambiente
+â”œâ”€â”€ README.md          # DocumentaÃ§Ã£o completa
+â”‚
+â””â”€â”€ templates/
+    â””â”€â”€ index.html     # Interface web responsiva em PortuguÃªs
 ```
 
 ### Funcionalidades Implementadas
 
 1. **API REST com Flask**
-   - `GET /` - Página principal com interface interativa
+   - `GET /` - PÃ¡gina principal com interface interativa
    - `GET /health` - Endpoint de health check
-   - `GET /init-db` - Inicialização da base de dados
+   - `GET /init-db` - InicializaÃ§Ã£o da base de dados
    - `GET /users` - Listagem de utilizadores
 
-2. **Integração PostgreSQL**
-   - Conexão segura via psycopg2
-   - Gestão de conexões
+2. **IntegraÃ§Ã£o PostgreSQL**
+   - ConexÃ£o segura via psycopg2
+   - GestÃ£o de conexÃµes
    - Queries SQL parametrizadas
    - Tratamento de erros
 
 3. **Interface Web**
    - Design responsivo moderno
-   - Suporte a português
-   - Interação AJAX com a API
-   - Feedback visual de operações
+   - Suporte a portuguÃªs
+   - InteraÃ§Ã£o AJAX com a API
+   - Feedback visual de operaÃ§Ãµes
 
-4. **Segurança**
-   - Debug mode desabilitado em produção
-   - Sem exposição de stack traces
-   - Dependências atualizadas e sem vulnerabilidades
-   - Variáveis de ambiente para configurações sensíveis
+4. **SeguranÃ§a**
+   - Debug mode desabilitado em produÃ§Ã£o
+   - Sem exposiÃ§Ã£o de stack traces
+   - DependÃªncias atualizadas e sem vulnerabilidades
+   - VariÃ¡veis de ambiente para configuraÃ§Ãµes sensÃ­veis
 
-## 🚀 Próximos Passos
+## ðŸš€ PrÃ³ximos Passos
 
 ### 1. Testar Localmente (Sem PostgreSQL)
 
 ```bash
-# Instalar dependências
+# Instalar dependÃªncias
 pip install -r requirements.txt
 
-# Executar aplicação (sem BD funcionará parcialmente)
+# Executar aplicaÃ§Ã£o (sem BD funcionarÃ¡ parcialmente)
 python app.py
 ```
 
@@ -72,7 +72,7 @@ createdb firstazureapp
 cp .env.example .env
 # Editar .env com suas credenciais
 
-# Executar aplicação
+# Executar aplicaÃ§Ã£o
 python app.py
 
 # Aceder: http://localhost:8000
@@ -106,14 +106,14 @@ az postgres flexible-server db create \
   --server-name firstazureapp-db \
   --database-name firstazureapp
 
-# Deploy da aplicação
+# Deploy da aplicaÃ§Ã£o
 az webapp up \
   --resource-group FirstAzureAppRG \
   --name firstazureapp \
   --runtime "PYTHON:3.11" \
   --sku B1
 
-# Configurar variáveis de ambiente
+# Configurar variÃ¡veis de ambiente
 az webapp config appsettings set \
   --resource-group FirstAzureAppRG \
   --name firstazureapp \
@@ -125,26 +125,26 @@ az webapp config appsettings set \
 1. Aceder ao [Portal Azure](https://portal.azure.com)
 2. Criar App Service (Python 3.11)
 3. Criar PostgreSQL Flexible Server
-4. Configurar variáveis de ambiente no App Service
+4. Configurar variÃ¡veis de ambiente no App Service
 5. Deploy via Git, GitHub Actions, ou VS Code
 
 ### 4. Inicializar Base de Dados
 
-Após o deploy, aceda:
+ApÃ³s o deploy, aceda:
 ```
 https://seu-app.azurewebsites.net/init-db
 ```
 
-Isso criará a tabela `users` e inserirá dados de exemplo.
+Isso criarÃ¡ a tabela `users` e inserirÃ¡ dados de exemplo.
 
-### 5. Testar a Aplicação
+### 5. Testar a AplicaÃ§Ã£o
 
 1. Abra: `https://seu-app.azurewebsites.net`
-2. Clique em "Verificar Saúde" - deve mostrar status "healthy"
+2. Clique em "Verificar SaÃºde" - deve mostrar status "healthy"
 3. Clique em "Inicializar BD" - cria tabelas e dados
 4. Clique em "Listar Utilizadores" - mostra dados da BD
 
-## 🛠️ Personalização
+## ðŸ› ï¸ PersonalizaÃ§Ã£o
 
 ### Adicionar Novos Endpoints
 
@@ -161,7 +161,7 @@ def novo_endpoint():
 
 ### Adicionar Novas Tabelas
 
-Edite a função `init_db()` em `app.py`:
+Edite a funÃ§Ã£o `init_db()` em `app.py`:
 
 ```python
 cursor.execute('''
@@ -175,71 +175,71 @@ cursor.execute('''
 ### Modificar Interface
 
 Edite `templates/index.html` para personalizar:
-- Cores (variáveis CSS)
+- Cores (variÃ¡veis CSS)
 - Textos
 - Funcionalidades
 - Layout
 
-## 📊 Monitorização
+## ðŸ“Š MonitorizaÃ§Ã£o
 
 ### No Azure Portal:
 
-1. Métricas da App Service
-2. Logs de aplicação
+1. MÃ©tricas da App Service
+2. Logs de aplicaÃ§Ã£o
 3. Application Insights (opcional)
-4. Métricas da PostgreSQL
+4. MÃ©tricas da PostgreSQL
 
 ### Localmente:
 
 ```bash
-# Ver logs da aplicação
+# Ver logs da aplicaÃ§Ã£o
 tail -f logs/app.log  # se configurado
 
-# Monitorar conexões PostgreSQL
+# Monitorar conexÃµes PostgreSQL
 psql -d firstazureapp -c "SELECT * FROM pg_stat_activity;"
 ```
 
-## 🔒 Segurança em Produção
+## ðŸ”’ SeguranÃ§a em ProduÃ§Ã£o
 
-1. **Nunca commitar .env** - use sempre Azure Key Vault ou variáveis de ambiente
+1. **Nunca commitar .env** - use sempre Azure Key Vault ou variÃ¡veis de ambiente
 2. **Firewall PostgreSQL** - permitir apenas Azure App Service
 3. **HTTPS** - Azure fornece certificado SSL gratuito
-4. **Autenticação** - adicionar autenticação JWT ou OAuth para endpoints sensíveis
+4. **AutenticaÃ§Ã£o** - adicionar autenticaÃ§Ã£o JWT ou OAuth para endpoints sensÃ­veis
 5. **Rate Limiting** - implementar para prevenir abusos
-6. **SQL Injection** - já protegido com queries parametrizadas
+6. **SQL Injection** - jÃ¡ protegido com queries parametrizadas
 
-## 📚 Recursos Adicionais
+## ðŸ“š Recursos Adicionais
 
-- [Documentação Flask](https://flask.palletsprojects.com/)
-- [Documentação psycopg2](https://www.psycopg.org/docs/)
+- [DocumentaÃ§Ã£o Flask](https://flask.palletsprojects.com/)
+- [DocumentaÃ§Ã£o psycopg2](https://www.psycopg.org/docs/)
 - [Azure App Service Python](https://docs.microsoft.com/azure/app-service/quickstart-python)
 - [Azure PostgreSQL](https://docs.microsoft.com/azure/postgresql/)
 
-## 💡 Dicas
+## ðŸ’¡ Dicas
 
 1. **Custos**: Use tiers gratuitos ou Basic para desenvolvimento
 2. **Performance**: Configure connection pooling para PostgreSQL
 3. **Escalabilidade**: Use Azure App Service auto-scaling
-4. **Backup**: Configure backups automáticos do PostgreSQL
-5. **CI/CD**: Configure GitHub Actions para deploy automático
+4. **Backup**: Configure backups automÃ¡ticos do PostgreSQL
+5. **CI/CD**: Configure GitHub Actions para deploy automÃ¡tico
 
-## ❓ Problemas Comuns
+## â“ Problemas Comuns
 
-### Erro de conexão à BD
+### Erro de conexÃ£o Ã  BD
 - Verificar firewall do PostgreSQL
-- Validar string de conexão
+- Validar string de conexÃ£o
 - Confirmar que a BD existe
 
-### App não inicia no Azure
+### App nÃ£o inicia no Azure
 - Verificar logs no Portal Azure
 - Confirmar startup command
 - Validar requirements.txt
 
 ### Erros 500
-- Verificar variáveis de ambiente
-- Validar conexão à BD
-- Consultar logs de aplicação
+- Verificar variÃ¡veis de ambiente
+- Validar conexÃ£o Ã  BD
+- Consultar logs de aplicaÃ§Ã£o
 
 ---
 
-✨ **Parabéns!** Você tem agora uma aplicação Azure completa e funcional!
+âœ¨ **ParabÃ©ns!** VocÃª tem agora uma aplicaÃ§Ã£o Azure completa e funcional!

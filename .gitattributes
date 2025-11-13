@@ -1,0 +1,30 @@
+# Git attributes for proper encoding and line endings
+
+# Auto detect text files and perform LF normalization
+* text=auto eol=lf
+
+# Explicitly declare text files
+*.py text eol=lf encoding=utf-8
+*.md text eol=lf encoding=utf-8
+*.txt text eol=lf encoding=utf-8
+*.json text eol=lf encoding=utf-8
+*.yml text eol=lf encoding=utf-8
+*.yaml text eol=lf encoding=utf-8
+*.html text eol=lf encoding=utf-8
+*.css text eol=lf encoding=utf-8
+*.js text eol=lf encoding=utf-8
+*.bicep text eol=lf encoding=utf-8
+*.sh text eol=lf encoding=utf-8
+
+# Declare files that will always have CRLF line endings on checkout
+*.bat text eol=crlf
+*.ps1 text eol=crlf
+
+# Denote binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.zip binary
+*.whl binary

@@ -1,38 +1,38 @@
-# FirstAzureApp 🚀
+# FirstAzureApp ðŸš€
 
-Primeira aplicação Azure com Python 3.13 e PostgreSQL!
+Primeira aplicaÃ§Ã£o Azure com Python 3.13 e PostgreSQL!
 
-## 📋 Descrição
+## ðŸ“‹ DescriÃ§Ã£o
 
-Esta é uma aplicação web desenvolvida com Flask que demonstra a integração entre Python e PostgreSQL na Azure. A aplicação inclui:
+Esta Ã© uma aplicaÃ§Ã£o web desenvolvida com Flask que demonstra a integraÃ§Ã£o entre Python e PostgreSQL na Azure. A aplicaÃ§Ã£o inclui:
 
-- ✅ API REST com Flask
-- ✅ Conexão com PostgreSQL
-- ✅ Interface web interativa
-- ✅ Endpoints para gestão de utilizadores
-- ✅ Health checks
-- ✅ Pronta para deploy na Azure
+- âœ… API REST com Flask
+- âœ… ConexÃ£o com PostgreSQL
+- âœ… Interface web interativa
+- âœ… Endpoints para gestÃ£o de utilizadores
+- âœ… Health checks
+- âœ… Pronta para deploy na Azure
 
-## 🛠️ Tecnologias
+## ðŸ› ï¸ Tecnologias
 
-- **Python 3.13** - Linguagem de programação
+- **Python 3.13** - Linguagem de programaÃ§Ã£o
 - **Flask** - Framework web
 - **PostgreSQL** - Base de dados
 - **psycopg2** - Driver PostgreSQL para Python
-- **Gunicorn** - Servidor WSGI para produção
+- **Gunicorn** - Servidor WSGI para produÃ§Ã£o
 - **Azure App Service** - Plataforma de hospedagem
 
-## 📦 Instalação Local
+## ðŸ“¦ InstalaÃ§Ã£o Local
 
-### Pré-requisitos
+### PrÃ©-requisitos
 
 - Python 3.13 ou superior
-- PostgreSQL instalado e em execução
+- PostgreSQL instalado e em execuÃ§Ã£o
 - pip (gestor de pacotes Python)
 
 ### Passos
 
-1. **Clone o repositório:**
+1. **Clone o repositÃ³rio:**
    ```bash
    git clone https://github.com/arkilian/FirstAzureApp.git
    cd FirstAzureApp
@@ -44,12 +44,12 @@ Esta é uma aplicação web desenvolvida com Flask que demonstra a integração 
    source venv/bin/activate  # No Windows: venv\Scripts\activate
    ```
 
-3. **Instale as dependências:**
+3. **Instale as dependÃªncias:**
    ```bash
    pip install -r requirements.txt
    ```
 
-4. **Configure as variáveis de ambiente:**
+4. **Configure as variÃ¡veis de ambiente:**
    ```bash
    cp .env.example .env
    ```
@@ -65,7 +65,7 @@ Esta é uma aplicação web desenvolvida com Flask que demonstra a integração 
    createdb firstazureapp
    ```
 
-6. **Execute a aplicação:**
+6. **Execute a aplicaÃ§Ã£o:**
    ```bash
    python app.py
    ```
@@ -75,13 +75,13 @@ Esta é uma aplicação web desenvolvida com Flask que demonstra a integração 
    http://localhost:8000
    ```
 
-## 🚀 Deploy na Azure
+## ðŸš€ Deploy na Azure
 
-### Opção 1: Azure CLI
+### OpÃ§Ã£o 1: Azure CLI
 
 1. **Instale a Azure CLI:**
    ```bash
-   # Siga as instruções em: https://docs.microsoft.com/cli/azure/install-azure-cli
+   # Siga as instruÃ§Ãµes em: https://docs.microsoft.com/cli/azure/install-azure-cli
    ```
 
 2. **Login na Azure:**
@@ -124,7 +124,7 @@ Esta é uma aplicação web desenvolvida com Flask que demonstra a integração 
      --sku B1
    ```
 
-7. **Configure a variável de ambiente:**
+7. **Configure a variÃ¡vel de ambiente:**
    ```bash
    az webapp config appsettings set \
      --resource-group FirstAzureAppRG \
@@ -140,48 +140,48 @@ Esta é uma aplicação web desenvolvida com Flask que demonstra a integração 
      --startup-file "startup.sh"
    ```
 
-### Opção 2: Visual Studio Code
+### OpÃ§Ã£o 2: Visual Studio Code
 
-1. Instale a extensão "Azure App Service"
-2. Faça login na sua conta Azure
-3. Clique com o botão direito na pasta do projeto
+1. Instale a extensÃ£o "Azure App Service"
+2. FaÃ§a login na sua conta Azure
+3. Clique com o botÃ£o direito na pasta do projeto
 4. Selecione "Deploy to Web App"
-5. Siga as instruções do assistente
+5. Siga as instruÃ§Ãµes do assistente
 
-## 📚 Endpoints da API
+## ðŸ“š Endpoints da API
 
-| Método | Endpoint | Descrição |
+| MÃ©todo | Endpoint | DescriÃ§Ã£o |
 |--------|----------|-----------|
-| GET | `/` | Página inicial com interface web |
-| GET | `/health` | Verificar estado da aplicação e BD |
+| GET | `/` | PÃ¡gina inicial com interface web |
+| GET | `/health` | Verificar estado da aplicaÃ§Ã£o e BD |
 | GET | `/init-db` | Inicializar a base de dados com dados de exemplo |
 | GET | `/users` | Listar todos os utilizadores |
 
-## 🧪 Testar a Aplicação
+## ðŸ§ª Testar a AplicaÃ§Ã£o
 
-1. Acesse a página inicial: `http://localhost:8000` ou `https://seu-app.azurewebsites.net`
-2. Clique em "Verificar Saúde" para testar a conexão
+1. Acesse a pÃ¡gina inicial: `http://localhost:8000` ou `https://seu-app.azurewebsites.net`
+2. Clique em "Verificar SaÃºde" para testar a conexÃ£o
 3. Clique em "Inicializar BD" para criar a tabela e dados de exemplo
 4. Clique em "Listar Utilizadores" para ver os dados
 
-## 📁 Estrutura do Projeto
+## ðŸ“ Estrutura do Projeto
 
 ```
 FirstAzureApp/
-│
-├── app.py              # Aplicação Flask principal
-├── requirements.txt    # Dependências Python
-├── startup.sh         # Script de startup para Azure
-├── azure.yaml         # Configuração Azure
-├── .env.example       # Exemplo de variáveis de ambiente
-├── .gitignore         # Ficheiros a ignorar no Git
-├── README.md          # Este ficheiro
-│
-└── templates/
-    └── index.html     # Template HTML da página inicial
+â”‚
+â”œâ”€â”€ app.py              # AplicaÃ§Ã£o Flask principal
+â”œâ”€â”€ requirements.txt    # DependÃªncias Python
+â”œâ”€â”€ startup.sh         # Script de startup para Azure
+â”œâ”€â”€ azure.yaml         # ConfiguraÃ§Ã£o Azure
+â”œâ”€â”€ .env.example       # Exemplo de variÃ¡veis de ambiente
+â”œâ”€â”€ .gitignore         # Ficheiros a ignorar no Git
+â”œâ”€â”€ README.md          # Este ficheiro
+â”‚
+â””â”€â”€ templates/
+    â””â”€â”€ index.html     # Template HTML da pÃ¡gina inicial
 ```
 
-## 🔧 Desenvolvimento
+## ðŸ”§ Desenvolvimento
 
 ### Adicionar novos endpoints
 
@@ -190,25 +190,25 @@ Edite `app.py` e adicione novas rotas:
 ```python
 @app.route('/novo-endpoint')
 def novo_endpoint():
-    return jsonify({'mensagem': 'Olá!'})
+    return jsonify({'mensagem': 'OlÃ¡!'})
 ```
 
 ### Modificar a base de dados
 
-Edite a função `init_db()` em `app.py` para adicionar novas tabelas ou dados.
+Edite a funÃ§Ã£o `init_db()` em `app.py` para adicionar novas tabelas ou dados.
 
-## 🔐 Segurança
+## ðŸ” SeguranÃ§a
 
-- ⚠️ Nunca commit o ficheiro `.env` com credenciais reais
-- 🔒 Use senhas fortes para a base de dados
-- 🛡️ Configure as regras de firewall do PostgreSQL na Azure
-- 🔑 Use Azure Key Vault para armazenar segredos em produção
+- âš ï¸ Nunca commit o ficheiro `.env` com credenciais reais
+- ðŸ”’ Use senhas fortes para a base de dados
+- ðŸ›¡ï¸ Configure as regras de firewall do PostgreSQL na Azure
+- ðŸ”‘ Use Azure Key Vault para armazenar segredos em produÃ§Ã£o
 
-## 🐛 Resolução de Problemas
+## ðŸ› ResoluÃ§Ã£o de Problemas
 
-### Erro de conexão com a base de dados
+### Erro de conexÃ£o com a base de dados
 
-- Verifique se o PostgreSQL está a correr
+- Verifique se o PostgreSQL estÃ¡ a correr
 - Confirme as credenciais no ficheiro `.env`
 - Na Azure, verifique as regras de firewall do servidor PostgreSQL
 
@@ -219,27 +219,27 @@ Se tiver problemas a instalar `psycopg2`, tente:
 pip install psycopg2-binary
 ```
 
-## 📝 Licença
+## ðŸ“ LicenÃ§a
 
-Este projeto é open source e está disponível sob a licença MIT.
+Este projeto Ã© open source e estÃ¡ disponÃ­vel sob a licenÃ§a MIT.
 
-## 👨‍💻 Autor
+## ðŸ‘¨â€ðŸ’» Autor
 
-Desenvolvido como exemplo de primeira aplicação Azure com Python e PostgreSQL.
+Desenvolvido como exemplo de primeira aplicaÃ§Ã£o Azure com Python e PostgreSQL.
 
-## 🤝 Contribuições
+## ðŸ¤ ContribuiÃ§Ãµes
 
-Contribuições são bem-vindas! Sinta-se à vontade para:
+ContribuiÃ§Ãµes sÃ£o bem-vindas! Sinta-se Ã  vontade para:
 - Reportar bugs
 - Sugerir novas funcionalidades
 - Enviar pull requests
 
-## 📞 Suporte
+## ðŸ“ž Suporte
 
-Para questões e suporte:
+Para questÃµes e suporte:
 - Crie uma issue no GitHub
-- Consulte a documentação da Azure: https://docs.microsoft.com/azure/
+- Consulte a documentaÃ§Ã£o da Azure: https://docs.microsoft.com/azure/
 
 ---
 
-⭐ Se este projeto foi útil, considere dar uma estrela no GitHub!
+â­ Se este projeto foi Ãºtil, considere dar uma estrela no GitHub!

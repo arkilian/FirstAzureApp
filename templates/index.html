@@ -135,28 +135,28 @@
 </head>
 <body>
     <div class="container">
-        <h1>🚀 Primeira Azure App</h1>
+        <h1>ðŸš€ Primeira Azure App</h1>
         <p class="subtitle">Python 3.13 + PostgreSQL na Azure</p>
         
         <div class="section">
-            <h2>✨ Bem-vindo!</h2>
-            <p>Esta é sua primeira aplicação Azure com Python e PostgreSQL. Use os botões abaixo para testar as funcionalidades:</p>
+            <h2>âœ¨ Bem-vindo!</h2>
+            <p>Esta Ã© sua primeira aplicaÃ§Ã£o Azure com Python e PostgreSQL. Use os botÃµes abaixo para testar as funcionalidades:</p>
         </div>
         
         <div class="section">
-            <h2>🔧 Testar Funcionalidades</h2>
+            <h2>ðŸ”§ Testar Funcionalidades</h2>
             
             <div class="button-group">
-                <button onclick="checkHealth()">🏥 Verificar Saúde</button>
-                <button onclick="initDatabase()">🗄️ Inicializar BD</button>
-                <button onclick="getUsers()">👥 Listar Utilizadores</button>
+                <button onclick="checkHealth()">ðŸ¥ Verificar SaÃºde</button>
+                <button onclick="initDatabase()">ðŸ—„ï¸ Inicializar BD</button>
+                <button onclick="getUsers()">ðŸ‘¥ Listar Utilizadores</button>
             </div>
             
             <div id="response" class="response"></div>
         </div>
         
         <div class="section">
-            <h2>💻 Tecnologias Utilizadas</h2>
+            <h2>ðŸ’» Tecnologias Utilizadas</h2>
             <div class="tech-stack">
                 <span class="tech-badge">Python 3.13</span>
                 <span class="tech-badge">Flask</span>
@@ -167,10 +167,10 @@
         </div>
         
         <div class="section">
-            <h2>📚 Endpoints API</h2>
+            <h2>ðŸ“š Endpoints API</h2>
             <ul style="line-height: 2;">
-                <li><strong>GET /</strong> - Página inicial</li>
-                <li><strong>GET /health</strong> - Verificar estado da aplicação</li>
+                <li><strong>GET /</strong> - PÃ¡gina inicial</li>
+                <li><strong>GET /health</strong> - Verificar estado da aplicaÃ§Ã£o</li>
                 <li><strong>GET /init-db</strong> - Inicializar base de dados</li>
                 <li><strong>GET /users</strong> - Listar todos os utilizadores</li>
             </ul>
@@ -189,7 +189,7 @@
                 
                 let statusClass = data.database === 'healthy' ? 'success' : 'error';
                 responseDiv.innerHTML = `
-                    <h3>Estado da Aplicação</h3>
+                    <h3>Estado da AplicaÃ§Ã£o</h3>
                     <p>Status: <span class="status ${statusClass}">${data.status}</span></p>
                     <p>Base de Dados: <span class="status ${statusClass}">${data.database}</span></p>
                 `;
