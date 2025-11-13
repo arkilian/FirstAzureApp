@@ -53,7 +53,7 @@ Esta Ã© uma aplicaÃ§Ã£o web desenvolvida com Flask que demonstra a integra
    ```bash
    cp .env.example .env
    ```
-   
+
    Edite o ficheiro `.env` com as suas credenciais PostgreSQL:
    ```
    DATABASE_URL=postgresql://seu_usuario:sua_senha@localhost:5432/firstazureapp

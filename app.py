@@ -29,13 +29,13 @@ def get_db_connection():
     db_user = os.getenv('DB_USER')
     db_password = os.getenv('DB_PASSWORD')
     db_port = os.getenv('DB_PORT', '5432')
-    
+
     if not all([db_host, db_name, db_user, db_password]):
         raise ValueError('Database credentials not found in environment variables')
-    
+
     # Build connection string with SSL required for Azure PostgreSQL
     conn_string = f"host={db_host} dbname={db_name} user={db_user} password={db_password} port={db_port} sslmode=require"
-    
+
     return psycopg2.connect(conn_string)
 
 @app.route('/')
@@ -71,7 +71,7 @@ def test_db():
         db_version = cursor.fetchone()[0]
         cursor.close()
         conn.close()
-        
+
         return jsonify({
             'status': 'success',
             'message': 'Database connection successful',
@@ -90,15 +90,15 @@ def list_tables():
         conn = get_db_connection()
         cursor = conn.cursor()
         cursor.execute("""
-            SELECT table_name 
-            FROM information_schema.tables 
+            SELECT table_name
+            FROM information_schema.tables
             WHERE table_schema = 'public'
             ORDER BY table_name;
         """)
         tables = [row[0] for row in cursor.fetchall()]
         cursor.close()
         conn.close()
-        
+
         return jsonify({
             'status': 'success',
             'tables': tables,

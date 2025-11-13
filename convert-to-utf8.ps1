@@ -9,22 +9,22 @@ $filesSkipped = 0
 
 foreach ($pattern in $filePatterns) {
     $files = Get-ChildItem -Path . -Filter $pattern -Recurse -File | Where-Object {
-        $_.FullName -notmatch '\\venv\\' -and 
+        $_.FullName -notmatch '\\venv\\' -and
         $_.FullName -notmatch '\\\.git\\' -and
         $_.FullName -notmatch '\\__pycache__\\' -and
         $_.FullName -notmatch '\\node_modules\\'
     }
-    
+
     foreach ($file in $files) {
         try {
             # Read file content
             $content = Get-Content -Path $file.FullName -Raw -ErrorAction Stop
-            
+
             if ($null -ne $content) {
                 # Write back as UTF-8 without BOM
                 $utf8NoBom = New-Object System.Text.UTF8Encoding $false
                 [System.IO.File]::WriteAllText($file.FullName, $content, $utf8NoBom)
-                
+
                 Write-Host "  [OK] $($file.FullName)" -ForegroundColor Green
                 $filesConverted++
             }
