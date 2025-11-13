@@ -52,7 +52,7 @@ module web './core/host/appservice.bicep' = {
     appServicePlanId: appServicePlan.outputs.id
     runtimeName: 'python'
     runtimeVersion: '3.11'
-    appCommandLine: 'gunicorn --bind=0.0.0.0 --timeout 600 app:app'
+    appCommandLine: 'startup.sh'
   }
 }
 
