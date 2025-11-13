@@ -6,6 +6,7 @@ param appServicePlanId string
 param runtimeName string
 param runtimeVersion string
 param appCommandLine string = ''
+param appSettings object = {}
 
 resource appService 'Microsoft.Web/sites@2022-03-01' = {
   name: name
@@ -20,6 +21,10 @@ resource appService 'Microsoft.Web/sites@2022-03-01' = {
       alwaysOn: true
       ftpsState: 'FtpsOnly'
       minTlsVersion: '1.2'
+      appSettings: [for setting in items(appSettings): {
+        name: setting.key
+        value: setting.value
+      }]
     }
     httpsOnly: true
   }

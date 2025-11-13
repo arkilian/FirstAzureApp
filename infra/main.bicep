@@ -52,7 +52,10 @@ module web './core/host/appservice.bicep' = {
     appServicePlanId: appServicePlan.outputs.id
     runtimeName: 'python'
     runtimeVersion: '3.11'
-    appCommandLine: 'startup.sh'
+    appCommandLine: 'gunicorn --workers=4 --bind=0.0.0.0:8000 app:app'
+    appSettings: {
+      DATABASE_URL: 'postgresql://dbadmin:P@ssw0rd2024!@postgres-firstapp-dev.postgres.database.azure.com/firstappdb?sslmode=require'
+    }
   }
 }
 
