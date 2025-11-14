@@ -146,7 +146,7 @@ def init_db():
         cursor.execute("""
             INSERT INTO users (name, email)
             VALUES
-                ('Jo�o Silva', 'joao@example.com'),
+                ('Joï¿½o Silva', 'joao@example.com'),
                 ('Maria Santos', 'maria@example.com'),
                 ('Pedro Costa', 'pedro@example.com')
             ON CONFLICT (email) DO NOTHING;

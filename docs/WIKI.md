@@ -1,24 +1,24 @@
 # FirstAzureApp Wiki
 
-## 1. Linha do Tempo (Cronologia das Ações)
+## 1. Linha do Tempo (Cronologia das AÃ§Ãµes)
 
 | Ordem | Etapa | Objetivo | Resultado |
 |-------|------|---------|-----------|
-| 1 | Criação de `test_db_connection.py` | Validar conectividade PostgreSQL isolada | Conexão estabelecida, versão do servidor exibida |
-| 2 | Adição de leitura de `.env` | Externalizar credenciais | Variáveis DB_* carregadas com sucesso |
-| 3 | Correção de parsing `DATABASE_URL` com `@` na password | Evitar quebras na URL | Troca para variáveis separadas DB_* recomendada |
-| 4 | Integração no `app.py` (rotas /db/test /db/tables) | Tornar teste acessível via API | Flask expõe saúde da BD |
-| 5 | Ativação venv e instalação dependências | Ambiente isolado | `psycopg2-binary` funcional em Windows |
-| 6 | Deploy inicial Azure App Service | Publicar aplicação | Página /health acessível na nuvem |
-| 7 | Remoção de segredos do Bicep | Segurança IaC | `main.bicep` sem credenciais hardcoded |
-| 8 | Padronização UTF-8 (headers/.editorconfig/.gitattributes) | Evitar caracteres corrompidos | Arquivos convertidos para UTF-8 sem BOM |
-| 9 | Implementação pre-commit + detect-secrets | Prevenir exposição de segredos | Hooks instalados e baseline criada |
-| 10 | Correção de baseline (encoding + staging) | Fazer hook passar | `detect-secrets` passa em todos os commits |
-| 11 | Criação endpoints `/init-db` e `/users` | Funcionalidade CRUD inicial | BD inicializa com dados de exemplo |
-| 12 | Recuperação de encoding corrompido no `index.html` | Corrigir interface | Emojis e acentuação normalizados |
-| 13 | Atualização `/health` para verificar DB | Health abrangente | Retorna `database=connected` |
-| 14 | Deploy final com `azd deploy` | Publicar versão estável | App funcional com todos endpoints |
-| 15 | Atualização README & Wiki | Documentação completa | Onboarding facilitado |
+| 1 | CriaÃ§Ã£o de `test_db_connection.py` | Validar conectividade PostgreSQL isolada | ConexÃ£o estabelecida, versÃ£o do servidor exibida |
+| 2 | AdiÃ§Ã£o de leitura de `.env` | Externalizar credenciais | VariÃ¡veis DB_* carregadas com sucesso |
+| 3 | CorreÃ§Ã£o de parsing `DATABASE_URL` com `@` na password | Evitar quebras na URL | Troca para variÃ¡veis separadas DB_* recomendada |
+| 4 | IntegraÃ§Ã£o no `app.py` (rotas /db/test /db/tables) | Tornar teste acessÃ­vel via API | Flask expÃµe saÃºde da BD |
+| 5 | AtivaÃ§Ã£o venv e instalaÃ§Ã£o dependÃªncias | Ambiente isolado | `psycopg2-binary` funcional em Windows |
+| 6 | Deploy inicial Azure App Service | Publicar aplicaÃ§Ã£o | PÃ¡gina /health acessÃ­vel na nuvem |
+| 7 | RemoÃ§Ã£o de segredos do Bicep | SeguranÃ§a IaC | `main.bicep` sem credenciais hardcoded |
+| 8 | PadronizaÃ§Ã£o UTF-8 (headers/.editorconfig/.gitattributes) | Evitar caracteres corrompidos | Arquivos convertidos para UTF-8 sem BOM |
+| 9 | ImplementaÃ§Ã£o pre-commit + detect-secrets | Prevenir exposiÃ§Ã£o de segredos | Hooks instalados e baseline criada |
+| 10 | CorreÃ§Ã£o de baseline (encoding + staging) | Fazer hook passar | `detect-secrets` passa em todos os commits |
+| 11 | CriaÃ§Ã£o endpoints `/init-db` e `/users` | Funcionalidade CRUD inicial | BD inicializa com dados de exemplo |
+| 12 | RecuperaÃ§Ã£o de encoding corrompido no `index.html` | Corrigir interface | Emojis e acentuaÃ§Ã£o normalizados |
+| 13 | AtualizaÃ§Ã£o `/health` para verificar DB | Health abrangente | Retorna `database=connected` |
+| 14 | Deploy final com `azd deploy` | Publicar versÃ£o estÃ¡vel | App funcional com todos endpoints |
+| 15 | AtualizaÃ§Ã£o README & Wiki | DocumentaÃ§Ã£o completa | Onboarding facilitado |
 
 ## 2. Infraestrutura (Bicep + azd)
 
@@ -26,9 +26,9 @@
 - App Settings configuradas fora do ficheiro para evitar segredos.
 - Deploy: `azd env new dev && azd deploy`.
 
-## 3. Variáveis de Ambiente
+## 3. VariÃ¡veis de Ambiente
 
-Usadas no código (`get_db_connection()`):
+Usadas no cÃ³digo (`get_db_connection()`):
 ```
 DB_HOST
 DB_PORT
@@ -37,48 +37,48 @@ DB_USER
 DB_PASSWORD
 FLASK_DEBUG (apenas local)
 ```
-Fallback: `DATABASE_URL` (não recomendado se existir password com caracteres especiais sem encoding).
+Fallback: `DATABASE_URL` (nÃ£o recomendado se existir password com caracteres especiais sem encoding).
 
 ## 4. Testes de Base de Dados
 
-- `test_db_simple.py` – Conexão rápida + versão.
-- `test_db_connection.py` – Máscara de credenciais, listagem de tabelas, fallback de URL.
+- `test_db_simple.py` â€“ ConexÃ£o rÃ¡pida + versÃ£o.
+- `test_db_connection.py` â€“ MÃ¡scara de credenciais, listagem de tabelas, fallback de URL.
 
-Execução:
+ExecuÃ§Ã£o:
 ```bash
 python test_db_simple.py
 python test_db_connection.py
 ```
 
-## 5. Segurança
+## 5. SeguranÃ§a
 
-- `.env` ignorado (não versionar segredos reais)
+- `.env` ignorado (nÃ£o versionar segredos reais)
 - `.env.example` pedagogicamente seguro
 - `detect-secrets` baseline: `.secrets.baseline`
-- Atualizar baseline quando justificável:
+- Atualizar baseline quando justificÃ¡vel:
 ```bash
 detect-secrets scan --exclude-files "venv|app_logs|app_logs2" > .secrets.baseline
 git add .secrets.baseline
 ```
 
-## 6. Codificação UTF-8
+## 6. CodificaÃ§Ã£o UTF-8
 
-Problema: Acentos e emojis corrompidos (sequências `Ã°Å¸`).
-Solução:
-- Conversão com `convert-to-utf8.ps1`
-- Remoção de BOM em ficheiros críticos
-- Adoção de `.editorconfig` e `.gitattributes` para consistência
+Problema: Acentos e emojis corrompidos (sequÃªncias `ÃƒÂ°Ã…Â¸`).
+SoluÃ§Ã£o:
+- ConversÃ£o com `convert-to-utf8.ps1`
+- RemoÃ§Ã£o de BOM em ficheiros crÃ­ticos
+- AdoÃ§Ã£o de `.editorconfig` e `.gitattributes` para consistÃªncia
 
 ## 7. Endpoints Principais
 
-| Endpoint | Função |
+| Endpoint | FunÃ§Ã£o |
 |----------|--------|
 | `/` | Interface HTML |
-| `/health` | Estado aplicação + teste DB |
-| `/init-db` | Criação da tabela `users` + seed |
+| `/health` | Estado aplicaÃ§Ã£o + teste DB |
+| `/init-db` | CriaÃ§Ã£o da tabela `users` + seed |
 | `/users` | Listagem dos utilizadores |
-| `/db/test` | Teste direto de conexão |
-| `/db/tables` | Inventário de tabelas públicas |
+| `/db/test` | Teste direto de conexÃ£o |
+| `/db/tables` | InventÃ¡rio de tabelas pÃºblicas |
 
 ## 8. Fluxo de Deploy Azure (Resumo)
 
@@ -91,32 +91,32 @@ az webapp config appsettings set \
   --name <app> \
   --settings DB_HOST=<fqdn> DB_PORT=5432 DB_NAME=<db> DB_USER=<user> DB_PASSWORD=<pass>
 ```
-Verificação pós-deploy:
+VerificaÃ§Ã£o pÃ³s-deploy:
 ```bash
 curl https://<app>.azurewebsites.net/health
 curl https://<app>.azurewebsites.net/init-db
 curl https://<app>.azurewebsites.net/users
 ```
 
-## 9. Troubleshooting Rápido
+## 9. Troubleshooting RÃ¡pido
 
-| Sintoma | Causa Provável | Ação |
+| Sintoma | Causa ProvÃ¡vel | AÃ§Ã£o |
 |---------|----------------|------|
-| 500 + UnicodeDecodeError | Arquivo não UTF-8 | Executar script conversão / salvar como UTF-8 sem BOM |
-| 404 `/init-db` | Código antigo | Pull da branch `main` ou redeploy |
+| 500 + UnicodeDecodeError | Arquivo nÃ£o UTF-8 | Executar script conversÃ£o / salvar como UTF-8 sem BOM |
+| 404 `/init-db` | CÃ³digo antigo | Pull da branch `main` ou redeploy |
 | DB erro ssl | Parametro faltando | Garantir `sslmode=require` na string interna |
-| Hook detect-secrets falha | Baseline não adicionada | `git add .secrets.baseline` |
-| Password com `@` quebra URL | Não codificada | Usar DB_* ou `%40` |
+| Hook detect-secrets falha | Baseline nÃ£o adicionada | `git add .secrets.baseline` |
+| Password com `@` quebra URL | NÃ£o codificada | Usar DB_* ou `%40` |
 
-## 10. Próximos Passos Sugeridos
+## 10. PrÃ³ximos Passos Sugeridos
 
 1. Adicionar CI (GitHub Actions) para rodar pre-commit e testes.
-2. Implementar autenticação básica ou JWT.
+2. Implementar autenticaÃ§Ã£o bÃ¡sica ou JWT.
 3. Migrar para SQLAlchemy ORM.
 4. Integrar Azure Key Vault para segredos (substituir DB_PASSWORD).
-5. Adicionar monitorização (Application Insights).
+5. Adicionar monitorizaÃ§Ã£o (Application Insights).
 
-## 11. Referências
+## 11. ReferÃªncias
 
 - Flask: https://flask.palletsprojects.com/
 - psycopg2: https://www.psycopg.org/
@@ -125,4 +125,4 @@ curl https://<app>.azurewebsites.net/users
 - Azure Developer CLI: https://learn.microsoft.com/azure/developer/azure-developer-cli/
 
 ---
-Mantido por: Equipa de exemplo • Atualize esta Wiki à medida que novas práticas forem adicionadas.
+Mantido por: Equipa de exemplo â€¢ Atualize esta Wiki Ã  medida que novas prÃ¡ticas forem adicionadas.

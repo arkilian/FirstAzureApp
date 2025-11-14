@@ -1,71 +1,71 @@
-# FirstAzureApp ??
+# FirstAzureApp ğŸš€
 
-Aplicação exemplo: Python 3.13 + Flask + PostgreSQL + Azure App Service.
+AplicaÃ§Ã£o exemplo: Python 3.13 + Flask + PostgreSQL + Azure App Service.
 
-## ? Visão Geral
+## âœ¨ VisÃ£o Geral
 
-Esta aplicação web demonstra uma configuração mínima porém robusta para executar Flask com PostgreSQL na Azure usando infraestrutura como código (Bicep) e práticas de segurança (variáveis de ambiente, pre-commit, detecção de segredos e codificação UTF-8).
+Esta aplicaÃ§Ã£o web demonstra uma configuraÃ§Ã£o mÃ­nima porÃ©m robusta para executar Flask com PostgreSQL na Azure usando infraestrutura como cÃ³digo (Bicep) e prÃ¡ticas de seguranÃ§a (variÃ¡veis de ambiente, pre-commit, detecÃ§Ã£o de segredos e codificaÃ§Ã£o UTF-8).
 
 Inclui:
 
-- ? API REST com Flask
-- ? Conexão segura com PostgreSQL (sslmode=require)
-- ? Interface web única (`templates/index.html`)
-- ? Endpoints para inicialização e listagem de utilizadores
-- ? Health check que também valida a base de dados
-- ? Deploy automatizado via `azd deploy`
-- ? Verificações locais de segurança (detect-secrets + pre-commit)
-- ? Codificação consistente UTF-8 sem BOM
+- âœ… API REST com Flask
+- âœ… ConexÃ£o segura com PostgreSQL (sslmode=require)
+- âœ… Interface web Ãºnica (`templates/index.html`)
+- âœ… Endpoints para inicializaÃ§Ã£o e listagem de utilizadores
+- âœ… Health check que tambÃ©m valida a base de dados
+- âœ… Deploy automatizado via `azd deploy`
+- âœ… VerificaÃ§Ãµes locais de seguranÃ§a (detect-secrets + pre-commit)
+- âœ… CodificaÃ§Ã£o consistente UTF-8 sem BOM
 
-## ?? Arquitetura & Infra
+## ğŸ§± Arquitetura & Infra
 
 Infraestrutura provisionada com Bicep (`infra/`):
 
 - `main.bicep` orquestra App Service e App Service Plan
-- Módulos em `infra/core/host/` para plano e web app
+- MÃ³dulos em `infra/core/host/` para plano e web app
 - `azure.yaml` define ambiente para Azure Developer CLI (azd)
 
-Fluxo de deploy: Código ? `azd deploy` ? Provisiona recursos + publica container de execução (App Service Python) ? Configura App Settings (via script ou portal) ? App disponível.
+Fluxo de deploy: CÃ³digo â†’ `azd deploy` â†’ Provisiona recursos + publica container de execuÃ§Ã£o (App Service Python) â†’ Configura App Settings (via script ou portal) â†’ App disponÃ­vel.
 
-## ?? Tecnologias
+## ğŸ§° Tecnologias
 
-- **Python 3.13** – linguagem principal
-- **Flask** – framework web
-- **PostgreSQL** – base de dados
-- **psycopg2-binary** – driver PostgreSQL
-- **Gunicorn** – servidor WSGI para produção (definido em `startup.sh`)
-- **Azure App Service** – hosting gerido
-- **Azure Developer CLI (azd)** – provisionamento + deploy
-- **Bicep** – IaC
-- **pre-commit / detect-secrets** – higiene e segurança
+- **Python 3.13** â€“ linguagem principal
+- **Flask** â€“ framework web
+- **PostgreSQL** â€“ base de dados
+- **psycopg2-binary** â€“ driver PostgreSQL
+- **Gunicorn** â€“ servidor WSGI para produÃ§Ã£o (definido em `startup.sh`)
+- **Azure App Service** â€“ hosting gerido
+- **Azure Developer CLI (azd)** â€“ provisionamento + deploy
+- **Bicep** â€“ IaC
+- **pre-commit / detect-secrets** â€“ higiene e seguranÃ§a
 
-## ?? Estrutura do Projeto
+## ğŸ“‚ Estrutura do Projeto
 
 ```
 FirstAzureApp/
-?? app.py                 # App Flask (rotas, DB, health)
-?? app_simple.py          # Versão simplificada (exemplo)
-?? requirements.txt       # Dependências Python
-?? startup.sh             # Comando de arranque para App Service (gunicorn)
-?? azure.yaml             # Configuração azd
-?? infra/                 # Bicep IaC
-?  ?? main.bicep
-?  ?? main.parameters.json
-?  ?? core/host/*.bicep
-?? templates/
-?  ?? index.html          # Interface web
-?? test_db_connection.py  # Diagnóstico completo de DB
-?? test_db_simple.py      # Teste rápido de DB
-?? .env.example           # Exemplo de variáveis
-?? .pre-commit-config.yaml# Hooks (higiene + segredos)
-?? .secrets.baseline      # Baseline detect-secrets
-?? convert-to-utf8.ps1    # Script de normalização UTF-8
-?? IMPLEMENTATION_GUIDE.md# Guia técnico adicional
+â”œâ”€ app.py                 # App Flask (rotas, DB, health)
+â”œâ”€ app_simple.py          # VersÃ£o simplificada (exemplo)
+â”œâ”€ requirements.txt       # DependÃªncias Python
+â”œâ”€ startup.sh             # Comando de arranque para App Service (gunicorn)
+â”œâ”€ azure.yaml             # ConfiguraÃ§Ã£o azd
+â”œâ”€ infra/                 # Bicep IaC
+â”‚  â”œâ”€ main.bicep
+â”‚  â”œâ”€ main.parameters.json
+â”‚  â””â”€ core/host/*.bicep
+â”œâ”€ templates/
+â”‚  â””â”€ index.html          # Interface web
+â”œâ”€ test_db_connection.py  # DiagnÃ³stico completo de DB
+â”œâ”€ test_db_simple.py      # Teste rÃ¡pido de DB
+â”œâ”€ .env.example           # Exemplo de variÃ¡veis
+â”œâ”€ .pre-commit-config.yaml# Hooks (higiene + segredos)
+â”œâ”€ .secrets.baseline      # Baseline detect-secrets
+â”œâ”€ convert-to-utf8.ps1    # Script de normalizaÃ§Ã£o UTF-8
+â””â”€ IMPLEMENTATION_GUIDE.md# Guia tÃ©cnico adicional
 ```
 
-## ?? Instalação Local
+## ğŸ’» InstalaÃ§Ã£o Local
 
-### Pré?requisitos
+### PrÃ©â€‘requisitos
 
 - Python 3.13+
 - PostgreSQL (local ou remoto)
@@ -74,7 +74,7 @@ FirstAzureApp/
 
 ### Passos
 
-1. **Clone o repositÃƒÂ³rio:**
+1. **Clone o repositÃ³rio:**
    ```bash
    git clone https://github.com/arkilian/FirstAzureApp.git
    cd FirstAzureApp
@@ -86,17 +86,17 @@ FirstAzureApp/
    source venv/bin/activate  # No Windows: venv\Scripts\activate
    ```
 
-3. **Instale as dependÃƒÂªncias:**
+3. **Instale as dependÃªncias:**
    ```bash
    pip install -r requirements.txt
    ```
 
-4. **Configure as variáveis de ambiente:**
+4. **Configure as variÃ¡veis de ambiente:**
    ```bash
    cp .env.example .env
    ```
 
-   Edite `.env` (exemplo usando variáveis individuais – preferível):
+   Edite `.env` (exemplo usando variÃ¡veis individuais â€“ preferÃ­vel):
    ```env
    DB_HOST=localhost
    DB_PORT=5432
@@ -106,7 +106,7 @@ FirstAzureApp/
    FLASK_DEBUG=true
    ```
 
-   Opcionalmente pode usar `DATABASE_URL` (atenção a caracteres especiais: encode com %). O código privilegia DB_* se presentes.
+   Opcionalmente pode usar `DATABASE_URL` (atenÃ§Ã£o a caracteres especiais: encode com %). O cÃ³digo privilegia DB_* se presentes.
 
 5. **Crie a base de dados:**
    ```bash
@@ -114,7 +114,7 @@ FirstAzureApp/
    createdb firstazureapp
    ```
 
-6. **Execute a aplicação:**
+6. **Execute a aplicaÃ§Ã£o:**
    ```bash
    python app.py
    ```
@@ -124,9 +124,9 @@ FirstAzureApp/
    http://localhost:8000
    ```
 
-## ?? Deploy na Azure
+## ğŸš€ Deploy na Azure
 
-### Método recomendado: Azure Developer CLI (azd)
+### MÃ©todo recomendado: Azure Developer CLI (azd)
 
 1. Login:
    ```bash
@@ -137,7 +137,7 @@ FirstAzureApp/
    azd env new dev
    azd deploy
    ```
-3. Configure as App Settings (se não automatizado):
+3. Configure as App Settings (se nÃ£o automatizado):
    ```bash
    az webapp config appsettings set \
      --resource-group <rg> \
@@ -150,7 +150,7 @@ FirstAzureApp/
 
 1. **Instale a Azure CLI:**
    ```bash
-   # Siga as instruÃƒÂ§ÃƒÂµes em: https://docs.microsoft.com/cli/azure/install-azure-cli
+   # Siga as instruÃ§Ãµes em: https://docs.microsoft.com/cli/azure/install-azure-cli
    ```
 
 2. **Login na Azure:**
@@ -193,12 +193,12 @@ FirstAzureApp/
      --sku B1
    ```
 
-7. **Configure variáveis de ambiente (use DB_* em vez de DATABASE_URL):**
+7. **Configure variÃ¡veis de ambiente (use DB_* em vez de DATABASE_URL):**
    ```bash
-    az webapp config appsettings set \
-       --resource-group FirstAzureAppRG \
-       --name firstazureapp \
-       --settings DB_HOST=firstazureapp-db.postgres.database.azure.com DB_PORT=5432 DB_NAME=firstazureapp DB_USER=azureuser DB_PASSWORD=<senha>
+   az webapp config appsettings set \
+     --resource-group FirstAzureAppRG \
+     --name firstazureapp \
+     --settings DB_HOST=firstazureapp-db.postgres.database.azure.com DB_PORT=5432 DB_NAME=firstazureapp DB_USER=azureuser DB_PASSWORD=<senha>
    ```
 
 8. **Configure o comando de startup:**
@@ -209,48 +209,48 @@ FirstAzureApp/
      --startup-file "startup.sh"
    ```
 
-### Opção 2: Visual Studio Code
+### OpÃ§Ã£o 2: Visual Studio Code
 
-1. Instale a extensÃƒÂ£o "Azure App Service"
-2. FaÃƒÂ§a login na sua conta Azure
-3. Clique com o botÃƒÂ£o direito na pasta do projeto
+1. Instale a extensÃ£o "Azure App Service"
+2. FaÃ§a login na sua conta Azure
+3. Clique com o botÃ£o direito na pasta do projeto
 4. Selecione "Deploy to Web App"
-5. Siga as instruÃƒÂ§ÃƒÂµes do assistente
+5. Siga as instruÃ§Ãµes do assistente
 
-## ?? Endpoints da API
+## ğŸ“š Endpoints da API
 
-| MÃƒÂ©todo | Endpoint | DescriÃƒÂ§ÃƒÂ£o |
+| MÃ©todo | Endpoint | DescriÃ§Ã£o |
 |--------|----------|-----------|
-| GET | `/` | Página inicial |
-| GET | `/health` | Verificar estado da aplicação e BD |
+| GET | `/` | PÃ¡gina inicial |
+| GET | `/health` | Verificar estado da aplicaÃ§Ã£o e BD |
 | GET | `/init-db` | Inicializar a base de dados com dados de exemplo |
 | GET | `/users` | Listar todos os utilizadores |
 
-## ?? Testar a Aplicação
+## ğŸ§ª Testar a AplicaÃ§Ã£o
 
-1. Acesse a pÃƒÂ¡gina inicial: `http://localhost:8000` ou `https://seu-app.azurewebsites.net`
-2. Clique em "Verificar SaÃƒÂºde" para testar a conexÃƒÂ£o
+1. Acesse a pÃ¡gina inicial: `http://localhost:8000` ou `https://seu-app.azurewebsites.net`
+2. Clique em "Verificar SaÃºde" para testar a conexÃ£o
 3. Clique em "Inicializar BD" para criar a tabela e dados de exemplo
 4. Clique em "Listar Utilizadores" para ver os dados
 
-## ?? Variáveis de Ambiente
+## ğŸ” VariÃ¡veis de Ambiente
 
-| Variável | Propósito |
+| VariÃ¡vel | PropÃ³sito |
 |----------|-----------|
 | `DB_HOST` | Host do PostgreSQL (FQDN no Azure) |
 | `DB_PORT` | Porta (default 5432) |
 | `DB_NAME` | Nome da base de dados |
 | `DB_USER` | Utilizador |
-| `DB_PASSWORD` | Senha (não commitar) |
+| `DB_PASSWORD` | Senha (nÃ£o commitar) |
 | `FLASK_DEBUG` | Ativa modo debug local |
-| `DATABASE_URL` | Alternativa única (apenas se preferir) |
+| `DATABASE_URL` | Alternativa Ãºnica (apenas se preferir) |
 
-Se ambos presentes, o código usa as variáveis individuais.
+Se ambos presentes, o cÃ³digo usa as variÃ¡veis individuais.
 
-## ?? Scripts & Testes
+## ğŸ›  Scripts & Testes
 
-- `test_db_simple.py` – teste rápido de conexão (SELECT version())
-- `test_db_connection.py` – diagnóstico detalhado (parsing, listagem de tabelas, masking de credenciais)
+- `test_db_simple.py` â€“ teste rÃ¡pido de conexÃ£o (SELECT version())
+- `test_db_connection.py` â€“ diagnÃ³stico detalhado (parsing, listagem de tabelas, masking de credenciais)
 
 Executar:
 ```bash
@@ -258,32 +258,32 @@ python test_db_simple.py
 python test_db_connection.py
 ```
 
-## ?? Codificação UTF-8
+## ğŸ§¾ CodificaÃ§Ã£o UTF-8
 
 Implementado para evitar caracteres corrompidos:
-- `.editorconfig` + `.gitattributes` forçam UTF-8 LF
+- `.editorconfig` + `.gitattributes` forÃ§am UTF-8 LF
 - `convert-to-utf8.ps1` normaliza ficheiros
-- Removido BOM onde necessário (ex.: `app.py`, `index.html`)
+- Removido BOM onde necessÃ¡rio (ex.: `app.py`, `index.html`)
 
-## ?? Segurança & Segredos
+## ğŸ›¡ SeguranÃ§a & Segredos
 
 1. Nunca commitar `.env`
-2. `.env.example` contém placeholders seguros
+2. `.env.example` contÃ©m placeholders seguros
 3. Pre-commit configurado em `.pre-commit-config.yaml`
 4. Baseline de segredos: `.secrets.baseline`
-5. Instalação hooks:
+5. InstalaÃ§Ã£o hooks:
    ```bash
    pip install -r requirements.txt  # garante detect-secrets
    pre-commit install
    pre-commit run --all-files
    ```
-6. Para atualizar baseline após mudanças justificadas:
+6. Para atualizar baseline apÃ³s mudanÃ§as justificadas:
    ```bash
    detect-secrets scan --exclude-files "venv|app_logs|app_logs2" > .secrets.baseline
    git add .secrets.baseline
    ```
 
-## ?? Desenvolvimento
+## ğŸ§© Desenvolvimento
 
 ### Adicionar novos endpoints
 
@@ -292,56 +292,56 @@ Edite `app.py` e adicione novas rotas:
 ```python
 @app.route('/novo-endpoint')
 def novo_endpoint():
-    return jsonify({'mensagem': 'OlÃƒÂ¡!'})
+    return jsonify({'mensagem': 'OlÃ¡!'})
 ```
 
 ### Modificar a base de dados
 
-Edite a funÃƒÂ§ÃƒÂ£o `init_db()` em `app.py` para adicionar novas tabelas ou dados.
+Edite a funÃ§Ã£o `init_db()` em `app.py` para adicionar novas tabelas ou dados.
 
-## ?? Troubleshooting
+## ğŸ§¯ Troubleshooting
 
-| Problema | Possível Causa | Solução |
+| Problema | PossÃ­vel Causa | SoluÃ§Ã£o |
 |----------|----------------|---------|
-| 500 na página inicial | Encoding incorreto | Executar script `convert-to-utf8.ps1` e confirmar sem BOM |
-| Erro SSL DB | sslmode ausente | Confirmar string de conexão (usa `sslmode=require`) |
-| 404 `/init-db` | Rota não carregada | Verificar se está na versão atual de `app.py` |
-| Detect-secrets falha | Baseline não stageada | `git add .secrets.baseline` |
-| Password com `@` no URL | Parsing quebra | Usar variáveis separadas ou URL encode `%40` |
-| Latência alta DB | Firewall/região | Ajustar VNET / verificar região e RUs |
+| 500 na pÃ¡gina inicial | Encoding incorreto | Executar script `convert-to-utf8.ps1` e confirmar sem BOM |
+| Erro SSL DB | sslmode ausente | Confirmar string de conexÃ£o (usa `sslmode=require`) |
+| 404 `/init-db` | Rota nÃ£o carregada | Verificar se estÃ¡ na versÃ£o atual de `app.py` |
+| Detect-secrets falha | Baseline nÃ£o stageada | `git add .secrets.baseline` |
+| Password com `@` no URL | Parsing quebra | Usar variÃ¡veis separadas ou URL encode `%40` |
+| LatÃªncia alta DB | Firewall/regiÃ£o | Ajustar VNET / verificar regiÃ£o e RUs |
 
-## ?? Boas Práticas (Resumo)
+## ğŸ”’ Boas PrÃ¡ticas (Resumo)
 
-- Reutilizar único `psycopg2.connect` por operação e fechar cursor/conn
-- Usar variáveis separadas em vez de URL sempre que possível
-- Prevenir exposição: nunca imprimir senha; script de teste mascara credenciais
-- Monitorar logs no App Service (`app_logs/` diretório local para referência)
+- Reutilizar Ãºnico `psycopg2.connect` por operaÃ§Ã£o e fechar cursor/conn
+- Usar variÃ¡veis separadas em vez de URL sempre que possÃ­vel
+- Prevenir exposiÃ§Ã£o: nunca imprimir senha; script de teste mascara credenciais
+- Monitorar logs no App Service (`app_logs/` diretÃ³rio local para referÃªncia)
 
-## ?? Pós-Deploy (Checklist)
+## ğŸ“¤ PÃ³s-Deploy (Checklist)
 
-1. Aceder `/health` ? `status=healthy` e `database=connected`
-2. Executar `/init-db` ? Mensagem de sucesso
-3. Aceder `/users` ? Lista de utilizadores exemplo
+1. Aceder `/health` â†’ `status=healthy` e `database=connected`
+2. Executar `/init-db` â†’ Mensagem de sucesso
+3. Aceder `/users` â†’ Lista de utilizadores exemplo
 4. Verificar Application Settings no portal Azure
-5. Guardar screenshot para documentação
+5. Guardar screenshot para documentaÃ§Ã£o
 
-## ?? Contribuições
+## ğŸ¤ ContribuiÃ§Ãµes
 
-Contribuições são bem?vindas: issues, PRs e melhorias de segurança.
+ContribuiÃ§Ãµes sÃ£o bemâ€‘vindas: issues, PRs e melhorias de seguranÃ§a.
 
-## ?? Licença
+## ğŸ“„ LicenÃ§a
 
-MIT – ver ficheiro LICENSE (adicione se ainda não existir).
+MIT â€“ ver ficheiro LICENSE (adicione se ainda nÃ£o existir).
 
-## ?? Autor
+## ğŸ‘¤ Autor
 
-Exemplo educativo de integração Azure + Python + PostgreSQL.
+Exemplo educativo de integraÃ§Ã£o Azure + Python + PostgreSQL.
 
-## ?? Suporte
+## ğŸ“ Suporte
 
 - Abrir issue no GitHub
-- Documentação Azure: https://learn.microsoft.com/azure/
+- DocumentaÃ§Ã£o Azure: https://learn.microsoft.com/azure/
 
 ---
 
-? Se este projeto foi útil, deixe uma estrela!
+â­ Se este projeto foi Ãºtil, deixe uma estrela!

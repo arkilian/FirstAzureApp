@@ -140,14 +140,14 @@
 
         <div class="section">
             <h2>? Bem-vindo!</h2>
-            <p>Esta � sua primeira aplica��o Azure com Python e PostgreSQL. Use os bot�es abaixo para testar as funcionalidades:</p>
+            <p>Esta ï¿½ sua primeira aplicaï¿½ï¿½o Azure com Python e PostgreSQL. Use os botï¿½es abaixo para testar as funcionalidades:</p>
         </div>
 
         <div class="section">
             <h2>?? Testar Funcionalidades</h2>
 
             <div class="button-group">
-                <button onclick="checkHealth()">?? Verificar Sa�de</button>
+                <button onclick="checkHealth()">?? Verificar Saï¿½de</button>
                 <button onclick="initDatabase()">??? Inicializar BD</button>
                 <button onclick="getUsers()">?? Listar Utilizadores</button>
             </div>
@@ -169,8 +169,8 @@
         <div class="section">
             <h2>?? Endpoints API</h2>
             <ul style="line-height: 2;">
-                <li><strong>GET /</strong> - P�gina inicial</li>
-                <li><strong>GET /health</strong> - Verificar estado da aplica��o</li>
+                <li><strong>GET /</strong> - Pï¿½gina inicial</li>
+                <li><strong>GET /health</strong> - Verificar estado da aplicaï¿½ï¿½o</li>
                 <li><strong>GET /init-db</strong> - Inicializar base de dados</li>
                 <li><strong>GET /users</strong> - Listar todos os utilizadores</li>
             </ul>
@@ -190,7 +190,7 @@
                 let statusClass = data.status === 'healthy' ? 'success' : 'error';
                 let dbStatusClass = data.database === 'connected' ? 'success' : 'error';
                 responseDiv.innerHTML = `
-                    <h3>Estado da Aplica��o</h3>
+                    <h3>Estado da Aplicaï¿½ï¿½o</h3>
                     <p>Status: <span class="status ${statusClass}">${data.status}</span></p>
                     <p>Base de Dados: <span class="status ${dbStatusClass}">${data.database || 'undefined'}</span></p>
                 `;
