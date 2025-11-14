@@ -80,22 +80,235 @@ Solução:
 | `/db/test` | Teste direto de conexão |
 | `/db/tables` | Inventário de tabelas públicas |
 
-## 8. Fluxo de Deploy Azure (Resumo)
+## 8. Comandos Azure CLI Utilizados
 
+### 8.1 Criação de Recursos
+
+#### Login e Configuração Inicial
 ```bash
+# Autenticação no Azure
 az login
-azd env new dev
-azd deploy
-az webapp config appsettings set \
-  --resource-group <rg> \
-  --name <app> \
-  --settings DB_HOST=<fqdn> DB_PORT=5432 DB_NAME=<db> DB_USER=<user> DB_PASSWORD=<pass>
+
+# Listar subscrições disponíveis
+az account list --output table
+
+# Definir subscrição ativa
+az account set --subscription "<SUBSCRIPTION_ID>"
 ```
-Verificação pós-deploy:
+
+#### Criação do Resource Group
 ```bash
-curl https://<app>.azurewebsites.net/health
-curl https://<app>.azurewebsites.net/init-db
-curl https://<app>.azurewebsites.net/users
+# Criar grupo de recursos
+az group create \
+  --name rg-firstapp-dev \
+  --location westeurope
+```
+
+#### Criação do PostgreSQL Flexible Server
+```bash
+# Criar servidor PostgreSQL
+az postgres flexible-server create \
+  --resource-group rg-firstapp-dev \
+  --name postgres-firstapp-dev \
+  --location westeurope \
+  --admin-user dbadmin \
+  --admin-password <SUA-SENHA-SEGURA> \
+  --sku-name Standard_B1ms \
+  --tier Burstable \
+  --version 14 \
+  --storage-size 32 \
+  --public-access 0.0.0.0
+
+# Criar base de dados
+az postgres flexible-server db create \
+  --resource-group rg-firstapp-dev \
+  --server-name postgres-firstapp-dev \
+  --database-name firstappdb
+
+# Configurar firewall (permitir serviços Azure)
+az postgres flexible-server firewall-rule create \
+  --resource-group rg-firstapp-dev \
+  --name postgres-firstapp-dev \
+  --rule-name AllowAllAzureIPs \
+  --start-ip-address 0.0.0.0 \
+  --end-ip-address 0.0.0.0
+
+# Configurar firewall (seu IP local para testes)
+az postgres flexible-server firewall-rule create \
+  --resource-group rg-firstapp-dev \
+  --name postgres-firstapp-dev \
+  --rule-name AllowMyIP \
+  --start-ip-address <SEU-IP> \
+  --end-ip-address <SEU-IP>
+```
+
+#### Criação do App Service (via Azure Developer CLI)
+```bash
+# Inicializar ambiente azd
+azd init
+
+# Criar novo ambiente
+azd env new dev
+
+# Provisionar infraestrutura (cria App Service Plan + App Service)
+azd provision
+
+# Ou deploy completo (provisiona + publica código)
+azd deploy
+```
+
+### 8.2 Configuração de Aplicação
+
+#### Configurar App Settings (Variáveis de Ambiente)
+```bash
+# Obter nome do web app
+$webAppName = az webapp list \
+  --resource-group rg-firstapp-dev \
+  --query "[0].name" \
+  --output tsv
+
+# Configurar variáveis de ambiente
+az webapp config appsettings set \
+  --resource-group rg-firstapp-dev \
+  --name $webAppName \
+  --settings \
+    DB_HOST=postgres-firstapp-dev.postgres.database.azure.com \
+    DB_PORT=5432 \
+    DB_NAME=firstappdb \
+    DB_USER=dbadmin \
+    DB_PASSWORD=<SUA-SENHA> \
+    FLASK_ENV=production \
+    FLASK_DEBUG=False
+
+# Configurar startup command
+az webapp config set \
+  --resource-group rg-firstapp-dev \
+  --name $webAppName \
+  --startup-file "startup.sh"
+```
+
+#### Usar Script PowerShell (configure-azure-env.ps1)
+```powershell
+# Opção 1: Carregar variáveis do .env
+Get-Content .env | Where-Object {$_ -and -not $_.StartsWith('#')} | ForEach-Object {
+    $k,$v = $_.Split('=',2)
+    Set-Item -Path Env:\$k -Value $v
+}
+.\configure-azure-env.ps1
+
+# Opção 2: Passar parâmetros diretamente
+.\configure-azure-env.ps1 `
+  -DbHost "postgres-firstapp-dev.postgres.database.azure.com" `
+  -DbName "firstappdb" `
+  -DbUser "dbadmin" `
+  -DbPort 5432
+```
+
+### 8.3 Gestão e Monitorização
+
+#### Ver Logs em Tempo Real
+```bash
+# Stream de logs
+az webapp log tail \
+  --resource-group rg-firstapp-dev \
+  --name $webAppName
+
+# Descarregar logs
+az webapp log download \
+  --resource-group rg-firstapp-dev \
+  --name $webAppName \
+  --log-file app_logs.zip
+```
+
+#### Restart da Aplicação
+```bash
+az webapp restart \
+  --resource-group rg-firstapp-dev \
+  --name $webAppName
+```
+
+#### Ver Estado da Aplicação
+```bash
+# Estado geral
+az webapp show \
+  --resource-group rg-firstapp-dev \
+  --name $webAppName \
+  --query "{Name:name, State:state, DefaultHostName:defaultHostName}" \
+  --output table
+
+# Verificar app settings
+az webapp config appsettings list \
+  --resource-group rg-firstapp-dev \
+  --name $webAppName \
+  --output table
+```
+
+### 8.4 Deploy de Código
+
+#### Via Azure Developer CLI (Recomendado)
+```bash
+# Deploy completo
+azd deploy
+
+# Deploy com build verbose
+azd deploy --debug
+```
+
+#### Via Git (Alternativa)
+```bash
+# Configurar remote
+az webapp deployment source config-local-git \
+  --resource-group rg-firstapp-dev \
+  --name $webAppName
+
+# Obter credenciais de deployment
+az webapp deployment list-publishing-credentials \
+  --resource-group rg-firstapp-dev \
+  --name $webAppName
+
+# Push para Azure
+git remote add azure https://<deployment-user>@<app-name>.scm.azurewebsites.net/<app-name>.git
+git push azure main
+```
+
+### 8.5 Verificação Pós-Deploy
+```bash
+# Health check
+curl https://app-web-5xuei2n6kwkfk.azurewebsites.net/health
+
+# Inicializar BD
+curl https://app-web-5xuei2n6kwkfk.azurewebsites.net/init-db
+
+# Listar utilizadores
+curl https://app-web-5xuei2n6kwkfk.azurewebsites.net/users
+
+# Ou via PowerShell
+Invoke-WebRequest -Uri "https://app-web-5xuei2n6kwkfk.azurewebsites.net/health" | Select-Object -ExpandProperty Content
+```
+
+### 8.6 Limpeza de Recursos
+
+#### Eliminar Resource Group (remove tudo)
+```bash
+az group delete \
+  --name rg-firstapp-dev \
+  --yes \
+  --no-wait
+```
+
+#### Eliminar apenas App Service
+```bash
+az webapp delete \
+  --resource-group rg-firstapp-dev \
+  --name $webAppName
+```
+
+#### Eliminar PostgreSQL Server
+```bash
+az postgres flexible-server delete \
+  --resource-group rg-firstapp-dev \
+  --name postgres-firstapp-dev \
+  --yes
 ```
 
 ## 9. Troubleshooting Rápido
