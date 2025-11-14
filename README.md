@@ -1,34 +1,76 @@
-# FirstAzureApp ðŸš€
+# FirstAzureApp ??
 
-Primeira aplicaÃ§Ã£o Azure com Python 3.13 e PostgreSQL!
+Aplica��o exemplo: Python 3.13 + Flask + PostgreSQL + Azure App Service.
 
-## ðŸ“‹ DescriÃ§Ã£o
+## ? Vis�o Geral
 
-Esta Ã© uma aplicaÃ§Ã£o web desenvolvida com Flask que demonstra a integraÃ§Ã£o entre Python e PostgreSQL na Azure. A aplicaÃ§Ã£o inclui:
+Esta aplica��o web demonstra uma configura��o m�nima por�m robusta para executar Flask com PostgreSQL na Azure usando infraestrutura como c�digo (Bicep) e pr�ticas de seguran�a (vari�veis de ambiente, pre-commit, detec��o de segredos e codifica��o UTF-8).
 
-- âœ… API REST com Flask
-- âœ… ConexÃ£o com PostgreSQL
-- âœ… Interface web interativa
-- âœ… Endpoints para gestÃ£o de utilizadores
-- âœ… Health checks
-- âœ… Pronta para deploy na Azure
+Inclui:
 
-## ðŸ› ï¸ Tecnologias
+- ? API REST com Flask
+- ? Conex�o segura com PostgreSQL (sslmode=require)
+- ? Interface web �nica (`templates/index.html`)
+- ? Endpoints para inicializa��o e listagem de utilizadores
+- ? Health check que tamb�m valida a base de dados
+- ? Deploy automatizado via `azd deploy`
+- ? Verifica��es locais de seguran�a (detect-secrets + pre-commit)
+- ? Codifica��o consistente UTF-8 sem BOM
 
-- **Python 3.13** - Linguagem de programaÃ§Ã£o
-- **Flask** - Framework web
-- **PostgreSQL** - Base de dados
-- **psycopg2** - Driver PostgreSQL para Python
-- **Gunicorn** - Servidor WSGI para produÃ§Ã£o
-- **Azure App Service** - Plataforma de hospedagem
+## ?? Arquitetura & Infra
 
-## ðŸ“¦ InstalaÃ§Ã£o Local
+Infraestrutura provisionada com Bicep (`infra/`):
 
-### PrÃ©-requisitos
+- `main.bicep` orquestra App Service e App Service Plan
+- M�dulos em `infra/core/host/` para plano e web app
+- `azure.yaml` define ambiente para Azure Developer CLI (azd)
 
-- Python 3.13 ou superior
-- PostgreSQL instalado e em execuÃ§Ã£o
-- pip (gestor de pacotes Python)
+Fluxo de deploy: C�digo ? `azd deploy` ? Provisiona recursos + publica container de execu��o (App Service Python) ? Configura App Settings (via script ou portal) ? App dispon�vel.
+
+## ?? Tecnologias
+
+- **Python 3.13** � linguagem principal
+- **Flask** � framework web
+- **PostgreSQL** � base de dados
+- **psycopg2-binary** � driver PostgreSQL
+- **Gunicorn** � servidor WSGI para produ��o (definido em `startup.sh`)
+- **Azure App Service** � hosting gerido
+- **Azure Developer CLI (azd)** � provisionamento + deploy
+- **Bicep** � IaC
+- **pre-commit / detect-secrets** � higiene e seguran�a
+
+## ?? Estrutura do Projeto
+
+```
+FirstAzureApp/
+?? app.py                 # App Flask (rotas, DB, health)
+?? app_simple.py          # Vers�o simplificada (exemplo)
+?? requirements.txt       # Depend�ncias Python
+?? startup.sh             # Comando de arranque para App Service (gunicorn)
+?? azure.yaml             # Configura��o azd
+?? infra/                 # Bicep IaC
+?  ?? main.bicep
+?  ?? main.parameters.json
+?  ?? core/host/*.bicep
+?? templates/
+?  ?? index.html          # Interface web
+?? test_db_connection.py  # Diagn�stico completo de DB
+?? test_db_simple.py      # Teste r�pido de DB
+?? .env.example           # Exemplo de vari�veis
+?? .pre-commit-config.yaml# Hooks (higiene + segredos)
+?? .secrets.baseline      # Baseline detect-secrets
+?? convert-to-utf8.ps1    # Script de normaliza��o UTF-8
+?? IMPLEMENTATION_GUIDE.md# Guia t�cnico adicional
+```
+
+## ?? Instala��o Local
+
+### Pr�?requisitos
+
+- Python 3.13+
+- PostgreSQL (local ou remoto)
+- Azure CLI (para deploy manual) e/ou Azure Developer CLI (`azd`)
+- Git
 
 ### Passos
 
@@ -49,15 +91,22 @@ Esta Ã© uma aplicaÃ§Ã£o web desenvolvida com Flask que demonstra a integra
    pip install -r requirements.txt
    ```
 
-4. **Configure as variÃ¡veis de ambiente:**
+4. **Configure as vari�veis de ambiente:**
    ```bash
    cp .env.example .env
    ```
 
-   Edite o ficheiro `.env` com as suas credenciais PostgreSQL:
+   Edite `.env` (exemplo usando vari�veis individuais � prefer�vel):
+   ```env
+   DB_HOST=localhost
+   DB_PORT=5432
+   DB_NAME=firstazureapp
+   DB_USER=seu_usuario
+   DB_PASSWORD=sua_senha
+   FLASK_DEBUG=true
    ```
-   DATABASE_URL=postgresql://seu_usuario:sua_senha@localhost:5432/firstazureapp
-   ```
+
+   Opcionalmente pode usar `DATABASE_URL` (aten��o a caracteres especiais: encode com %). O c�digo privilegia DB_* se presentes.
 
 5. **Crie a base de dados:**
    ```bash
@@ -65,7 +114,7 @@ Esta Ã© uma aplicaÃ§Ã£o web desenvolvida com Flask que demonstra a integra
    createdb firstazureapp
    ```
 
-6. **Execute a aplicaÃ§Ã£o:**
+6. **Execute a aplica��o:**
    ```bash
    python app.py
    ```
@@ -75,9 +124,29 @@ Esta Ã© uma aplicaÃ§Ã£o web desenvolvida com Flask que demonstra a integra
    http://localhost:8000
    ```
 
-## ðŸš€ Deploy na Azure
+## ?? Deploy na Azure
 
-### OpÃ§Ã£o 1: Azure CLI
+### M�todo recomendado: Azure Developer CLI (azd)
+
+1. Login:
+   ```bash
+   az login
+   ```
+2. (Uma vez configurado o ambiente em `azure.yaml`) Deploy completo:
+   ```bash
+   azd env new dev
+   azd deploy
+   ```
+3. Configure as App Settings (se n�o automatizado):
+   ```bash
+   az webapp config appsettings set \
+     --resource-group <rg> \
+     --name <app-name> \
+     --settings DB_HOST=<host> DB_PORT=5432 DB_NAME=<db> DB_USER=<user> DB_PASSWORD=<senha>
+   ```
+4. Verifique endpoint: abra `https://<app-name>.azurewebsites.net/health`.
+
+### Alternativa: Azure CLI manual
 
 1. **Instale a Azure CLI:**
    ```bash
@@ -124,12 +193,12 @@ Esta Ã© uma aplicaÃ§Ã£o web desenvolvida com Flask que demonstra a integra
      --sku B1
    ```
 
-7. **Configure a variÃ¡vel de ambiente:**
+7. **Configure vari�veis de ambiente (use DB_* em vez de DATABASE_URL):**
    ```bash
-   az webapp config appsettings set \
-     --resource-group FirstAzureAppRG \
-     --name firstazureapp \
-     --settings DATABASE_URL="postgresql://azureuser:<senha>@firstazureapp-db.postgres.database.azure.com:5432/firstazureapp"
+    az webapp config appsettings set \
+       --resource-group FirstAzureAppRG \
+       --name firstazureapp \
+       --settings DB_HOST=firstazureapp-db.postgres.database.azure.com DB_PORT=5432 DB_NAME=firstazureapp DB_USER=azureuser DB_PASSWORD=<senha>
    ```
 
 8. **Configure o comando de startup:**
@@ -140,7 +209,7 @@ Esta Ã© uma aplicaÃ§Ã£o web desenvolvida com Flask que demonstra a integra
      --startup-file "startup.sh"
    ```
 
-### OpÃ§Ã£o 2: Visual Studio Code
+### Op��o 2: Visual Studio Code
 
 1. Instale a extensÃ£o "Azure App Service"
 2. FaÃ§a login na sua conta Azure
@@ -148,40 +217,73 @@ Esta Ã© uma aplicaÃ§Ã£o web desenvolvida com Flask que demonstra a integra
 4. Selecione "Deploy to Web App"
 5. Siga as instruÃ§Ãµes do assistente
 
-## ðŸ“š Endpoints da API
+## ?? Endpoints da API
 
 | MÃ©todo | Endpoint | DescriÃ§Ã£o |
 |--------|----------|-----------|
-| GET | `/` | PÃ¡gina inicial com interface web |
-| GET | `/health` | Verificar estado da aplicaÃ§Ã£o e BD |
+| GET | `/` | P�gina inicial |
+| GET | `/health` | Verificar estado da aplica��o e BD |
 | GET | `/init-db` | Inicializar a base de dados com dados de exemplo |
 | GET | `/users` | Listar todos os utilizadores |
 
-## ðŸ§ª Testar a AplicaÃ§Ã£o
+## ?? Testar a Aplica��o
 
 1. Acesse a pÃ¡gina inicial: `http://localhost:8000` ou `https://seu-app.azurewebsites.net`
 2. Clique em "Verificar SaÃºde" para testar a conexÃ£o
 3. Clique em "Inicializar BD" para criar a tabela e dados de exemplo
 4. Clique em "Listar Utilizadores" para ver os dados
 
-## ðŸ“ Estrutura do Projeto
+## ?? Vari�veis de Ambiente
 
-```
-FirstAzureApp/
-â”‚
-â”œâ”€â”€ app.py              # AplicaÃ§Ã£o Flask principal
-â”œâ”€â”€ requirements.txt    # DependÃªncias Python
-â”œâ”€â”€ startup.sh         # Script de startup para Azure
-â”œâ”€â”€ azure.yaml         # ConfiguraÃ§Ã£o Azure
-â”œâ”€â”€ .env.example       # Exemplo de variÃ¡veis de ambiente
-â”œâ”€â”€ .gitignore         # Ficheiros a ignorar no Git
-â”œâ”€â”€ README.md          # Este ficheiro
-â”‚
-â””â”€â”€ templates/
-    â””â”€â”€ index.html     # Template HTML da pÃ¡gina inicial
+| Vari�vel | Prop�sito |
+|----------|-----------|
+| `DB_HOST` | Host do PostgreSQL (FQDN no Azure) |
+| `DB_PORT` | Porta (default 5432) |
+| `DB_NAME` | Nome da base de dados |
+| `DB_USER` | Utilizador |
+| `DB_PASSWORD` | Senha (n�o commitar) |
+| `FLASK_DEBUG` | Ativa modo debug local |
+| `DATABASE_URL` | Alternativa �nica (apenas se preferir) |
+
+Se ambos presentes, o c�digo usa as vari�veis individuais.
+
+## ?? Scripts & Testes
+
+- `test_db_simple.py` � teste r�pido de conex�o (SELECT version())
+- `test_db_connection.py` � diagn�stico detalhado (parsing, listagem de tabelas, masking de credenciais)
+
+Executar:
+```bash
+python test_db_simple.py
+python test_db_connection.py
 ```
 
-## ðŸ”§ Desenvolvimento
+## ?? Codifica��o UTF-8
+
+Implementado para evitar caracteres corrompidos:
+- `.editorconfig` + `.gitattributes` for�am UTF-8 LF
+- `convert-to-utf8.ps1` normaliza ficheiros
+- Removido BOM onde necess�rio (ex.: `app.py`, `index.html`)
+
+## ?? Seguran�a & Segredos
+
+1. Nunca commitar `.env`
+2. `.env.example` cont�m placeholders seguros
+3. Pre-commit configurado em `.pre-commit-config.yaml`
+4. Baseline de segredos: `.secrets.baseline`
+5. Instala��o hooks:
+   ```bash
+   pip install -r requirements.txt  # garante detect-secrets
+   pre-commit install
+   pre-commit run --all-files
+   ```
+6. Para atualizar baseline ap�s mudan�as justificadas:
+   ```bash
+   detect-secrets scan --exclude-files "venv|app_logs|app_logs2" > .secrets.baseline
+   git add .secrets.baseline
+   ```
+
+## ?? Desenvolvimento
 
 ### Adicionar novos endpoints
 
@@ -197,49 +299,49 @@ def novo_endpoint():
 
 Edite a funÃ§Ã£o `init_db()` em `app.py` para adicionar novas tabelas ou dados.
 
-## ðŸ” SeguranÃ§a
+## ?? Troubleshooting
 
-- âš ï¸ Nunca commit o ficheiro `.env` com credenciais reais
-- ðŸ”’ Use senhas fortes para a base de dados
-- ðŸ›¡ï¸ Configure as regras de firewall do PostgreSQL na Azure
-- ðŸ”‘ Use Azure Key Vault para armazenar segredos em produÃ§Ã£o
+| Problema | Poss�vel Causa | Solu��o |
+|----------|----------------|---------|
+| 500 na p�gina inicial | Encoding incorreto | Executar script `convert-to-utf8.ps1` e confirmar sem BOM |
+| Erro SSL DB | sslmode ausente | Confirmar string de conex�o (usa `sslmode=require`) |
+| 404 `/init-db` | Rota n�o carregada | Verificar se est� na vers�o atual de `app.py` |
+| Detect-secrets falha | Baseline n�o stageada | `git add .secrets.baseline` |
+| Password com `@` no URL | Parsing quebra | Usar vari�veis separadas ou URL encode `%40` |
+| Lat�ncia alta DB | Firewall/regi�o | Ajustar VNET / verificar regi�o e RUs |
 
-## ðŸ› ResoluÃ§Ã£o de Problemas
+## ?? Boas Pr�ticas (Resumo)
 
-### Erro de conexÃ£o com a base de dados
+- Reutilizar �nico `psycopg2.connect` por opera��o e fechar cursor/conn
+- Usar vari�veis separadas em vez de URL sempre que poss�vel
+- Prevenir exposi��o: nunca imprimir senha; script de teste mascara credenciais
+- Monitorar logs no App Service (`app_logs/` diret�rio local para refer�ncia)
 
-- Verifique se o PostgreSQL estÃ¡ a correr
-- Confirme as credenciais no ficheiro `.env`
-- Na Azure, verifique as regras de firewall do servidor PostgreSQL
+## ?? P�s-Deploy (Checklist)
 
-### Erro ao instalar psycopg2
+1. Aceder `/health` ? `status=healthy` e `database=connected`
+2. Executar `/init-db` ? Mensagem de sucesso
+3. Aceder `/users` ? Lista de utilizadores exemplo
+4. Verificar Application Settings no portal Azure
+5. Guardar screenshot para documenta��o
 
-Se tiver problemas a instalar `psycopg2`, tente:
-```bash
-pip install psycopg2-binary
-```
+## ?? Contribui��es
 
-## ðŸ“ LicenÃ§a
+Contribui��es s�o bem?vindas: issues, PRs e melhorias de seguran�a.
 
-Este projeto Ã© open source e estÃ¡ disponÃ­vel sob a licenÃ§a MIT.
+## ?? Licen�a
 
-## ðŸ‘¨â€ðŸ’» Autor
+MIT � ver ficheiro LICENSE (adicione se ainda n�o existir).
 
-Desenvolvido como exemplo de primeira aplicaÃ§Ã£o Azure com Python e PostgreSQL.
+## ?? Autor
 
-## ðŸ¤ ContribuiÃ§Ãµes
+Exemplo educativo de integra��o Azure + Python + PostgreSQL.
 
-ContribuiÃ§Ãµes sÃ£o bem-vindas! Sinta-se Ã  vontade para:
-- Reportar bugs
-- Sugerir novas funcionalidades
-- Enviar pull requests
+## ?? Suporte
 
-## ðŸ“ž Suporte
-
-Para questÃµes e suporte:
-- Crie uma issue no GitHub
-- Consulte a documentaÃ§Ã£o da Azure: https://docs.microsoft.com/azure/
+- Abrir issue no GitHub
+- Documenta��o Azure: https://learn.microsoft.com/azure/
 
 ---
 
-â­ Se este projeto foi Ãºtil, considere dar uma estrela no GitHub!
+? Se este projeto foi �til, deixe uma estrela!
